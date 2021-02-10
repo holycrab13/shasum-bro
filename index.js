@@ -1,11 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const url = require('url');
-const querystring = require('querystring');
 const cors = require('cors');
 const shasum = require('js-sha256');
-const fetch = require('node-fetch');
-const request = require('request');
+const axios = require('axios');
 
 var corsOptions = {
   origin: '*',
@@ -23,21 +20,38 @@ app.get('/', async function(req, res) {
     try {
         console.log(req.headers);
 
-        if(req.headers['authorization'] !== "Bj5pnZEX6DkcG6Nz6AjDUT1bvcGRVhRaXDuKDX9CjsEs2") {
-           res.status(500).send({});
-        }
-
-
+        // if(req.headers['authorization'] !== "Bj5pnZEX6DkcG6Nz6AjDUT1bvcGRVhRaXDuKDX9CjsEs2") {
+        //   res.status(500).send({});
+        //   return;
+        //}
 
         var url = req.query.url;
         var hash = shasum.create();
 
         console.log(url);
 
-        request(url).pipe(res);
+        var response = await axios.request({
+            method: "GET",
+            url: url,
+            responseType: "stream",
+        });
+        
+        var bytesRead = 0;
+        var contentLength = response.headers['content-length'];
+
+        for await (data of response.data) { 
+
+            bytesRead += data.length;
+            hash = hash.update(data);
+            res.write('' + bytesRead + '/' + contentLength + '$');
+        }
+
+        res.write(hash.hex());
+        res.end();
 
     } catch(err) {
-       res.status(500).send(err);
+        console.log(err);
+        res.status(500).send(err);
     }
 });
 
