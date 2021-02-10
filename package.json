@@ -1,0 +1,20 @@
+{
+  "name": "shasum-bro",
+  "version": "1.0.0",
+  "description": "The mighty shasum generator.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "js-sha256": "^0.9.0",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2"
+  }
+}
