@@ -17,15 +17,16 @@ app.use(bodyParser.json());
 // Function to handle the root path
 app.get('/', async function(req, res) {
 
+    console.log('received');
     try {
         console.log(req.headers);
 
-        // if(req.headers['authorization'] !== "Bj5pnZEX6DkcG6Nz6AjDUT1bvcGRVhRaXDuKDX9CjsEs2") {
-        //   res.status(500).send({});
-        //   return;
-        //}
+//        if(req.headers['authorization'] !== "Bj5pnZEX6DkcG6Nz6AjDUT1bvcGRVhRaXDuKDX9CjsEs2") {
+  //         res.status(500).send({});
+    //       return;
+//        }
 
-        var url = req.query.url;
+        var url = decodeURIComponent(req.query.url);
         var hash = shasum.create();
 
         console.log(url);
